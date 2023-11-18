@@ -19,4 +19,4 @@ https://zhukovsd.github.io/java-backend-learning-course/Projects/Hangman/
 Пример игры
 --------
 
-![img_1.png](main/resources/img_1.png)
+![img_1.png](src/main/resources/img_1.png)
