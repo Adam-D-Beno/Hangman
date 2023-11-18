@@ -12,11 +12,17 @@ public class GameEngine {
     private final RandomWord randomWord;
     /** Поле хранить максимальное количество ошибок */
     private final int maxError = 2;
+    /** Поле содержить замаскированные символы */
     private char[] secretWordView;
+    /** Поле сожержить количество правильных ответов */
     private int numberCorrectAnswer;
+    /** Поле сожержить количество неправильных ответов */
     private int numberWrongAnswer;
+    /** Поле содержить set найденных индексов */
     private Set<Integer> indexFoundChar;
+    /** Поле содержить set найденных символов */
     private Set<Character> enteredCharacters;
+    /** Поле содержить Map количество уникальных сивмолов */
     private Map<Character, Integer> numberUniqueCharacters;
 
     /**
@@ -29,6 +35,9 @@ public class GameEngine {
         this.randomWord = randomWord;
     }
 
+    /**
+     * Метод запускает логику игры.
+     */
     public void startGame() {
       boolean gameNOtOver = true;
        String secretWord = getRandomWord();
@@ -88,15 +97,23 @@ public class GameEngine {
     }
 
 
-    private void logicCorrectAnswer(char input, int index) {
-        indexFoundChar.add(index);
+    /**
+     * Методе описана логика обработки правильных ответов.
+     * @param input введенный пользователем символ
+     * @param indexChar индекс символа в секретном слове
+     */
+    private void logicCorrectAnswer(char input, int indexChar) {
+        indexFoundChar.add(indexChar);
         enteredCharacters.add(input);
         numberCorrectAnswer++;
         System.out.println("Вы нашли букву в слове.");
-        secretWordView[index] = input;
+        secretWordView[indexChar] = input;
         System.out.println(secretWordView);
     }
 
+    /**
+     * Методе описана логика обработки неправильны ответов
+     */
     private void logicWrongAnswer() {
         numberWrongAnswer++;
         System.out.println("Такой буквы нет! У вас осталось попыток " + (numberWrongAnswer - maxError));
@@ -104,6 +121,10 @@ public class GameEngine {
         printImage(numberWrongAnswer);
     }
 
+    /**
+     * Метод инициализирует начальные параметры.
+     * @param secretWord секретное слово.
+     */
     private void initParam(String secretWord) {
         initUniqueCharactersMap(secretWord);
         enteredCharacters = new HashSet<>();
@@ -115,6 +136,10 @@ public class GameEngine {
                 " Количество символов в слове " + secretWord.length());
     }
 
+    /**
+     * Методе заполняет Map количество уникальных слов.
+     * @param secretWord секретное слово
+     */
     private void initUniqueCharactersMap(String secretWord) {
         numberUniqueCharacters = new HashMap<>();
         for (int i = 0; i < secretWord.length(); i++) {
