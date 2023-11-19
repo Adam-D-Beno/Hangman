@@ -14,7 +14,6 @@ public class GameEngine {
     private final int maxError = 6;
     /** Поле содержить замаскированные символы */
     private char[] secretWordView;
-    private char[] wordView;
     /** Поле сожержить количество правильных ответов */
     private int numberCorrectAnswer;
     /** Поле сожержить количество неправильных ответов */
@@ -138,7 +137,6 @@ public class GameEngine {
         indexFoundChar = new HashSet<>();
         numberCorrectAnswer = 0;
         numberWrongAnswer = 0;
-        wordView = secretWord.toCharArray();
         secretWordView = "*".repeat(secretWord.length()).toCharArray();
         System.out.println(Arrays.toString(secretWordView) +
                 " Количество символов в слове " + secretWord.length());
