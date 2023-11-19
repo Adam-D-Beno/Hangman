@@ -22,7 +22,7 @@ public class Main {
             if (select == YES) {
                 engine.startGame();
             } else if (select == EXIT) {
-//                in.close();
+                   in.close();
                 System.exit(0);
             } else {
                 System.out.println("Сделайте выбор ещё раз");

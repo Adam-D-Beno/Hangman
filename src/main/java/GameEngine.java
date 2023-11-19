@@ -11,17 +11,18 @@ public class GameEngine {
     /** Поле содержит объект класса RandomWord, который выдает случайное слово */
     private final RandomWord randomWord;
     /** Поле хранить максимальное количество ошибок */
-    private final int maxError = 2;
+    private final int maxError = 6;
     /** Поле содержить замаскированные символы */
     private char[] secretWordView;
+    private char[] wordView;
     /** Поле сожержить количество правильных ответов */
     private int numberCorrectAnswer;
     /** Поле сожержить количество неправильных ответов */
     private int numberWrongAnswer;
     /** Поле содержить set найденных индексов */
     private Set<Integer> indexFoundChar;
-    /** Поле содержить set найденных символов */
-    private Set<Character> enteredCharacters;
+    /**Поле содержит map найденных символов где ключом является введенный символ, значением количество введ. симв.*/
+    private Map<Character, Integer> enteredCountCharacters;
     /** Поле содержить Map количество уникальных сивмолов */
     private Map<Character, Integer> numberUniqueCharacters;
 
@@ -59,7 +60,7 @@ public class GameEngine {
                if (indexFoundChar.contains(i)) {
                    continue;
                }
-               if (enteredCharacters.contains(input) && numberUniqueCharacters.get(input) == 1) {
+               if (enteredCountCharacters.containsKey(input) && enteredCountCharacters.get(input) >= numberUniqueCharacters.get(input)) {
                    System.out.println("Вы уже вводили эту букву.");
                    break;
                }
@@ -73,7 +74,7 @@ public class GameEngine {
             if (numberCorrectAnswer == secretWord.length()) {
                 System.out.println("\n \n \tПоздравляем ! Вы выйграли ! \n \n");
                 gameNOtOver = false;
-            }else if (numberWrongAnswer == maxError){ //
+            }else if (numberWrongAnswer == maxError || numberWrongAnswer == secretWord.length()){ //
                 System.out.println("\n \tВы проиграли, допустив много ошибок !  \n \n");
                 gameNOtOver = false;
             }
@@ -104,11 +105,16 @@ public class GameEngine {
      */
     private void logicCorrectAnswer(char input, int indexChar) {
         indexFoundChar.add(indexChar);
-        enteredCharacters.add(input);
+        if (enteredCountCharacters.containsKey(input)) {
+           int count = enteredCountCharacters.get(input);
+           enteredCountCharacters.put(input, ++count);
+        }else {
+            enteredCountCharacters.put(input, 1);
+        }
         numberCorrectAnswer++;
         System.out.println("Вы нашли букву в слове.");
         secretWordView[indexChar] = input;
-        System.out.println(secretWordView);
+        System.out.println(Arrays.toString(secretWordView));
     }
 
     /**
@@ -119,6 +125,7 @@ public class GameEngine {
         System.out.println("Такой буквы нет! У вас осталось попыток " + (numberWrongAnswer - maxError));
         System.out.println();
         printImage(numberWrongAnswer);
+        System.out.println(Arrays.toString(secretWordView));
     }
 
     /**
@@ -127,10 +134,11 @@ public class GameEngine {
      */
     private void initParam(String secretWord) {
         initUniqueCharactersMap(secretWord);
-        enteredCharacters = new HashSet<>();
+        enteredCountCharacters = new HashMap<>();
         indexFoundChar = new HashSet<>();
         numberCorrectAnswer = 0;
         numberWrongAnswer = 0;
+        wordView = secretWord.toCharArray();
         secretWordView = "*".repeat(secretWord.length()).toCharArray();
         System.out.println(Arrays.toString(secretWordView) +
                 " Количество символов в слове " + secretWord.length());
